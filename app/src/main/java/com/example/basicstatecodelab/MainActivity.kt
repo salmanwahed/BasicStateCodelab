@@ -110,7 +110,11 @@ fun WellnessScreen(
         horizontalAlignment = Alignment.CenterHorizontally) {
         StatefulCounter()
         val list = wellnessViewModel.tasks
-        WellnessTasksList(list, onCloseTask = { task -> wellnessViewModel.remove(task) })
+        WellnessTasksList(
+            list,
+            onCloseTask = { task -> wellnessViewModel.remove(task) },
+            onCheckedTask = { task, checked -> wellnessViewModel.changeTaskChecked(task, checked) }
+        )
     }
 }
 

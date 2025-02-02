@@ -27,7 +27,7 @@ fun WellnessTaskItem(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     onClose: () -> Unit,
-    modifier: Modifier) {
+    modifier: Modifier = Modifier) {
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -55,16 +55,17 @@ fun WellnessTaskItem(
 @Composable
 fun WellnessTaskItem(
     taskName: String,
-    onClose: () -> Unit,
-    modifier: Modifier = Modifier) {
-    var checked by rememberSaveable { mutableStateOf(false) }
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    onClose: () -> Unit
+    ) {
 
     WellnessTaskItem(
         taskName = taskName,
         checked = checked,
-        onCheckedChange = { newValue -> checked = newValue },
+        onCheckedChange = onCheckedChange,
         onClose = onClose,
-        modifier
+        modifier = Modifier
     )
 }
 
@@ -73,6 +74,6 @@ fun WellnessTaskItem(
 fun WellnessTaskItemPreview(
     taskName: String = "Task 1"){
     BasicStateCodelabTheme {
-        WellnessTaskItem(taskName, onClose = {})
+        WellnessTaskItem(taskName, checked = false, onClose = {}, onCheckedChange = {})
     }
 }
