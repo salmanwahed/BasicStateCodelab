@@ -1,15 +1,12 @@
 package com.example.basicstatecodelab
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -20,11 +17,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.basicstatecodelab.MainActivity.Companion.TAG
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.basicstatecodelab.ui.theme.BasicStateCodelabTheme
 
 class MainActivity : ComponentActivity() {
@@ -75,7 +73,7 @@ fun StatelessCounter(
     modifier: Modifier = Modifier
 ){
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
 
     ) {
@@ -95,6 +93,8 @@ fun StatelessCounter(
     }
 }
 
+private fun getWellnessTasks() = List(30) { i -> WellnessTask(i, "Task # $i") }
+
 @Composable
 fun StatefulCounter(modifier: Modifier = Modifier) {
     var count by rememberSaveable { mutableStateOf(0) }
@@ -102,8 +102,16 @@ fun StatefulCounter(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun WellnessScreen(modifier: Modifier = Modifier) {
-    StatefulCounter()
+fun WellnessScreen(
+    modifier: Modifier = Modifier,
+    wellnessViewModel: WellnessViewModel = viewModel()) {
+    Column(
+        modifier = modifier.padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally) {
+        StatefulCounter()
+        val list = wellnessViewModel.tasks
+        WellnessTasksList(list, onCloseTask = { task -> wellnessViewModel.remove(task) })
+    }
 }
 
 @Preview(showBackground = true)
